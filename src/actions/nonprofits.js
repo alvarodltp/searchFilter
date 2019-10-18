@@ -9,24 +9,32 @@ import {
   NONPROFIT_REMOVED
 } from './types';
 import uuid from 'uuid';
+import { setLoading } from './loading';
 
-
-export const getNonProfitByName = name => async dispatch => {
+export const getNonProfitByName = (name) => async dispatch => {
   try {
+    setLoading(true);
+    
     const response = await axios.get(`https://projects.propublica.org/nonprofits/api/v2/search.json?q=${name}`)
 
     dispatch({type: GET_NONPROFITS_BY_NAME, payload: response.data.organizations})
+
+    setLoading(false);
 
   } catch (err) {
     dispatch({type: SEARCH_ERROR, payload: 'Network Error'})
   }
 };
 
-export const getNonProfitByEin = number => async dispatch => {
+export const getNonProfitByEin = (number) => async dispatch => {
   try {
     const response = await axios.get(`https://projects.propublica.org/nonprofits/api/v2/organizations/${number}.json`)
 
-    dispatch({type: GET_NONPROFITS_BY_EIN, payload: response.data.organization})
+    setLoading(true);
+
+    dispatch({type: GET_NONPROFITS_BY_EIN, payload: response.data.organization});
+
+    setLoading(false);
 
   } catch (err) {
     dispatch({type: SEARCH_ERROR, payload: 'Network Error'})

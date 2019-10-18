@@ -8,7 +8,6 @@ import { FaMapMarkerAlt, FaUniversity } from "react-icons/fa";
 class SearchResult extends React.Component {
 
   save = (selected) => {
-    console.log(selected.ein)
     const alreadySaved = this.props.savedList.find(nonprofit => nonprofit === selected);
 
     if(alreadySaved === undefined){

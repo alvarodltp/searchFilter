@@ -10,7 +10,7 @@ import {
 
 const initialState = {
   data: [],
-  loading: true,
+  loading: '',
   savedList: [],
   alerts: [],
   error: {}

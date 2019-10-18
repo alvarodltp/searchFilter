@@ -4,7 +4,6 @@ import SearchResult from '../searchresult/SearchResult';
 import { Checkbox } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { getNonProfitByName, getNonProfitByEin } from '../../actions/nonprofits';
-import { setLoading } from '../../actions/loading';
 
 class Search extends React.Component {
   constructor(){
@@ -23,7 +22,6 @@ class Search extends React.Component {
   }
 
   handleSearch = () => {
-    this.props.setLoading(false);
     if(this.state.inputType === 'text'){
       this.props.getNonProfitByName(this.state.searchTerm);
     } else {
@@ -33,7 +31,6 @@ class Search extends React.Component {
 
   render(){
     const { inputType } = this.state;
-    const { setLoading } = this.props;
     return(
       <React.Fragment>
         <div className="search-box">
@@ -53,7 +50,6 @@ class Search extends React.Component {
               className="input" 
               type={inputType} 
               placeholder="Search Non-Profit..." 
-              onKeyDown={() => setLoading(true)}
               onKeyUp={(e) => this.handleSearch(this.setState({searchTerm: e.target.value}))}
             />
           <div className="results-container">
@@ -67,10 +63,11 @@ class Search extends React.Component {
 }
 
 const mapStateToProps = state => {
+  console.log(state.loading)
   return { loading: state.loading }
 };
 
 export default connect(mapStateToProps, { 
   getNonProfitByName, 
-  getNonProfitByEin, 
-  setLoading })(Search);
+  getNonProfitByEin
+})(Search);
