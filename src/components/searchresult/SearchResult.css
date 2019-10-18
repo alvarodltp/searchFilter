@@ -1,0 +1,6 @@
+.result-item {
+  background-color: #F0F0F0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+}

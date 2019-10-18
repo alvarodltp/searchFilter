@@ -1,0 +1,30 @@
+.search-box {
+  padding: 20px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 20px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.checkbox-group {
+  padding: 10px;
+}
+
+.ui.checkbox .box:after, .ui.checkbox label:after {
+  color: red;
+}
+
+.ui.checkbox {
+  margin: 10px;
+}
+
+.results-container {
+  overflow: auto;
+  height: 60vh;
+  border-radius: 4px;
+}
