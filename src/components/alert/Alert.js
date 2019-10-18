@@ -2,12 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Message } from 'semantic-ui-react';
 
-const Alert = ({alertMessage}) => 
-    alertMessage &&  <Message className="alert" color={alertMessage.color}>{alertMessage.text}</Message>
-
+const Alert = ({alerts}) => 
+  alerts !== null && alerts.length > 0 && alerts.map(alert => (
+    <Message key={alert.id} className="alert" color={alert.type}>{alert.message}</Message>
+    )
+  ) 
+  
 const mapStateToProps = state => {
+  console.log(state.nonprofits.alerts)
   return {
-    alertMessage: state.nonprofits.alertMessage
+    alerts: state.nonprofits.alerts
   }
 }
 

@@ -12,7 +12,7 @@ const initialState = {
   data: [],
   loading: true,
   savedList: [],
-  alertMessage: null,
+  alerts: [],
   error: {}
 }
 
@@ -44,12 +44,12 @@ const nonprofits = (state = initialState, action) => {
     case SET_ALERT:
       return {
         ...state,
-        alertMessage: payload
+        alerts: [ ...state.alerts, payload]
       }
     case REMOVE_ALERT:
       return {
         ...state,
-        alertMessage: null
+        alerts: state.alerts.filter(alert => alert.id !== payload)
       }
     case SEARCH_ERROR:
       return {

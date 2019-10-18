@@ -8,15 +8,18 @@ import { FaMapMarkerAlt, FaUniversity } from "react-icons/fa";
 class SearchResult extends React.Component {
 
   save = (selected) => {
+    console.log(selected.ein)
     const alreadySaved = this.props.savedList.find(nonprofit => nonprofit === selected);
 
     if(alreadySaved === undefined){
-      let message = {text: `${selected.name} has been added to your list.`, color: 'green'}
+      const message = `${selected.name} has been added to your list.`;
+      const type = 'green';
       this.props.selectNonProfit(selected);
-      this.props.setAlert(message);
+      this.props.setAlert(message, type);
     } else {
-      let message = {text: `${selected.name} is already in your list.`, color: 'orange'}
-      this.props.setAlert(message);
+      const message = `${selected.name} is already in your list.`;
+      const type = 'orange';
+      this.props.setAlert(message, type);
     }
   }
 
@@ -25,8 +28,8 @@ class SearchResult extends React.Component {
     return(
       searchResults && searchResults.map((nonprofit, ein) => 
       <div onClick={() => this.save(nonprofit)} key={ein} className='result-item'>
-        <h4><FaUniversity color="blue" />{' '}{nonprofit.name}</h4>
-        <p><FaMapMarkerAlt color="blue"/>{' '}{nonprofit.city}, {nonprofit.state}</p>
+        <h4><FaUniversity color="gray" />{' '}{nonprofit.name}</h4>
+        <p><FaMapMarkerAlt color="white"/>{' '}{nonprofit.city}, {nonprofit.state}</p>
       </div> )
     )
   }

@@ -1,6 +1,11 @@
 .result-item {
-  background-color: #F0F0F0;
+  background: linear-gradient(90deg, rgba(252,180,36,1) 19%, rgba(253,204,41,1) 100%);;
   border: 1px solid #ccc;
   padding: 10px;
   cursor: pointer;
+  color: white;
+}
+
+.result-item h4 {
+  color: gray;
 }

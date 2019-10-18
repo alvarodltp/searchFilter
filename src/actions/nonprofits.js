@@ -8,6 +8,7 @@ import {
   REMOVE_ALERT,
   NONPROFIT_REMOVED
 } from './types';
+import uuid from 'uuid';
 
 
 export const getNonProfitByName = name => async dispatch => {
@@ -36,10 +37,12 @@ export const selectNonProfit = nonprofit => async dispatch => {
   dispatch({type: NONPROFIT_SAVED, payload: nonprofit})
 };
 
-export const setAlert = (alertMessage, timeout = 3000) => async dispatch =>{
-  dispatch({ type: SET_ALERT, payload: alertMessage})
+export const setAlert = (message, type, timeout = 3000) => async dispatch =>{
+  const id = uuid.v4();
 
-  setTimeout(() => dispatch({ type: REMOVE_ALERT }), timeout);
+  dispatch({ type: SET_ALERT, payload: {message, type, id}});
+
+  setTimeout(() => dispatch({ type: REMOVE_ALERT, payload: id }), timeout);
 };
 
 export const removeSavedNonProfit = ein => async dispatch => {
