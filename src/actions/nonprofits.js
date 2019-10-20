@@ -19,37 +19,50 @@ export const handleSearch = search => dispatch => {
   dispatch({type: HANDLE_SEARCH, payload: search});
 };
 
-export const setSearchResults = search => async (dispatch, getState) => {
-
-  let searchState = getState().nonprofits.search;
-
-  const searchByEIN = async search => {
-    console.log(`${url}/organizations/${search}.json`)
-    const response = await axios.get(`${url}/organizations/${search}.json`);
-    dispatch({type: SET_SEARCH_RESULTS, payload: [response.data.organization]});
-  };
-
-  const searchByName = async search => {
-    console.log(`${url}/search.json?q=${search}`);
-    const response = await axios.get(`${url}/search.json?q=${search}`);
-    dispatch({type: SET_SEARCH_RESULTS, payload: response.data.organizations});
-  };
+export const setSearchResults = search => async dispatch => {
 
   try {
-    dispatch({type: SET_LOADING, payload: true});
+    dispatch({ type: SET_LOADING, payload: true });
+    dispatch({ type: HANDLE_SEARCH, payload: search });
 
-    if(searchState.length === 0){
-      dispatch({type: CLEAR_SEARCH, payload: []});
-    } else if(search === searchState && isValid(searchState)){
-      searchByEIN(searchState)
-    } else if(search === searchState) {
-      searchByName(searchState)
+    if (search === "") {
+      dispatch({ type: CLEAR_SEARCH, payload: [] });
+    } else if (isValid(search)) {
+      dispatch(searchByEIN(search));
+    } else {
+      dispatch(searchByName(search));
     }
 
-    dispatch({type: SET_LOADING, payload: false});
+    dispatch({ type: SET_LOADING, payload: false });
 
   } catch (err) {
     dispatch({type: SEARCH_ERROR, payload: err});
+  }
+};
+
+const searchByName = search => async (dispatch, getState) => {
+  console.log(`${url}/search.json?q=${search}`);
+  const response = await axios.get(`${url}/search.json?q=${search}`);
+  const currentSearchValue = getState().nonprofits.search;
+
+  if (currentSearchValue === search) {
+    dispatch({
+      type: SET_SEARCH_RESULTS,
+      payload: response.data.organizations
+    });
+  }
+};
+
+const searchByEIN = search => async (dispatch, getState) => {
+  console.log(`${url}/organizations/${search}.json`);
+  const response = await axios.get(`${url}/organizations/${search}.json`);
+  const currentSearchValue = getState().nonprofits.search;
+
+  if (currentSearchValue === search) {
+    dispatch({
+      type: SET_SEARCH_RESULTS,
+      payload: [response.data.organization]
+    });
   }
 };
 
