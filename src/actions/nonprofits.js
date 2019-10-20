@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { 
+  HANDLE_SEARCH,
   SET_SEARCH_RESULTS, 
   NONPROFIT_SAVED, 
   SEARCH_ERROR,
@@ -14,46 +15,46 @@ import { isValid } from 'ein-validator/dist/src';
 
 const url = "https://api.givebutter.dev/nonprofits/api/v2";
 
-export const setSearchResults = search => async dispatch => {
+export const handleSearch = search => dispatch => {
+  dispatch({type: HANDLE_SEARCH, payload: search});
+};
+
+export const setSearchResults = search => async (dispatch, getState) => {
+
+  let searchState = getState().nonprofits.search;
+
+  const searchByEIN = async search => {
+    console.log(`${url}/organizations/${search}.json`)
+    const response = await axios.get(`${url}/organizations/${search}.json`);
+    dispatch({type: SET_SEARCH_RESULTS, payload: [response.data.organization]});
+  };
+
+  const searchByName = async search => {
+    console.log(`${url}/search.json?q=${search}`);
+    const response = await axios.get(`${url}/search.json?q=${search}`);
+    dispatch({type: SET_SEARCH_RESULTS, payload: response.data.organizations});
+  };
 
   try {
+    dispatch({type: SET_LOADING, payload: true});
 
-    if(search.length === 0){
-
-      dispatch({type: CLEAR_SEARCH, payload: []});
-
-    } else if(isValid(search)){
-
-      dispatch({type: SET_LOADING, payload: true});
-
-      console.log(`https://api.givebutter.dev/nonprofits/api/v2/organizations/${search}.json`)
-
-      const response = await axios.get(`${url}/organizations/${search}.json`);
-    
-      dispatch({type: SET_SEARCH_RESULTS, payload: [response.data.organization]});
-
-      dispatch({type: SET_LOADING, payload: false});
-
+   if(search === searchState && isValid(searchState)){
+      searchByEIN(searchState)
+    } else if(search === searchState) {
+      searchByName(searchState)
     } else {
-
-      dispatch({type: SET_LOADING, payload: true});
-      
-      console.log(`https://api.givebutter.dev/nonprofits/api/v2/search.json?q=${search}`);
-
-      const response = await axios.get(`${url}/search.json?q=${search}`);
-
-      dispatch({type: SET_SEARCH_RESULTS, payload: response.data.organizations});
-
-      dispatch({type: SET_LOADING, payload: false});
+      dispatch({type: CLEAR_SEARCH, payload: []});
     }
 
+    dispatch({type: SET_LOADING, payload: false});
+
   } catch (err) {
-    dispatch({type: SEARCH_ERROR, payload: err})
+    dispatch({type: SEARCH_ERROR, payload: err});
   }
 };
 
 export const selectNonProfit = nonprofit => dispatch => {
-  dispatch({type: NONPROFIT_SAVED, payload: nonprofit})
+  dispatch({type: NONPROFIT_SAVED, payload: nonprofit});
 };
 
 export const setAlert = (message, type, timeout = 3000) => dispatch => {
@@ -64,7 +65,11 @@ export const setAlert = (message, type, timeout = 3000) => dispatch => {
   setTimeout(() => dispatch({ type: REMOVE_ALERT, payload: id }), timeout);
 };
 
-
 export const removeSavedNonProfit = ein => dispatch => {
-  dispatch({ type: NONPROFIT_REMOVED, payload: ein})
+  dispatch({ type: NONPROFIT_REMOVED, payload: ein});
 };
+
+
+// if(searchState.length === 0){
+//   dispatch({type: CLEAR_SEARCH, payload: []});
+// } else 

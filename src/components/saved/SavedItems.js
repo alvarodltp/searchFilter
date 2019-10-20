@@ -7,15 +7,13 @@ const SavedItems = ({savedList, removeSavedNonProfit}) => (
     savedList.map(nonprofit => (
       <div key={nonprofit.ein} className="saved-card">
         <div className="card-content">
-          <h4><FaUniversity />{' '}{nonprofit.name}</h4>
+          <h4><FaUniversity/>{'  '}{nonprofit.name}</h4>
           <p>{nonprofit.address}</p>
           <p>{nonprofit.city}, {nonprofit.state} {nonprofit.zipcode}</p>
         </div> 
-        <div className="actions">
-          <button onClick={() => removeSavedNonProfit(nonprofit.ein)} className="remove">
-            <FaTrash />
-          </button>
-        </div>
+        <button onClick={() => removeSavedNonProfit(nonprofit.ein)} className="remove">
+          <FaTrash />
+        </button>
       </div>
     )
   )

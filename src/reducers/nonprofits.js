@@ -1,4 +1,5 @@
 import { 
+  HANDLE_SEARCH,
   SET_SEARCH_RESULTS,
   SEARCH_ERROR, 
   NONPROFIT_SAVED,
@@ -10,6 +11,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
+  search: '',
   data: [],
   loading: false,
   savedList: [],
@@ -20,6 +22,11 @@ const initialState = {
 const nonprofits = (state = initialState, action) => {
   const { type, payload } = action;
   switch(type){
+    case HANDLE_SEARCH:
+      return {
+        ...state,
+        search: payload
+      }
     case SET_SEARCH_RESULTS:
       return {
         ...state,

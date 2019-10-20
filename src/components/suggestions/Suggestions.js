@@ -24,10 +24,9 @@ class SearchResult extends React.Component {
 
   render(){
     const { suggestions } = this.props;
-    console.log(suggestions);
     return(
       <React.Fragment>
-        {suggestions && suggestions !== undefined && suggestions[0] !== undefined ? suggestions.map((nonprofit, i) => 
+        {suggestions && suggestions.map((nonprofit, i) => 
         <div 
           onClick={() => this.save(nonprofit)} 
           key={i} 
@@ -35,7 +34,7 @@ class SearchResult extends React.Component {
           >
             <h4><FaUniversity color="gray" />{' '}{nonprofit.name}</h4>
             <p><FaMapMarkerAlt color="white"/>{' '}{nonprofit.city}, {nonprofit.state}</p>
-        </div> ) : null}
+        </div> )}
       </React.Fragment>
     )
   }
