@@ -5,12 +5,12 @@ import {
   NONPROFIT_SAVED,
   SET_ALERT,
   REMOVE_ALERT,
-  NONPROFIT_REMOVED
+  NONPROFIT_REMOVED,
+  CLEAR_SEARCH
 } from "../actions/types";
 
 const initialState = {
   data: [],
-  loading: '',
   savedList: [],
   alerts: [],
   error: {}
@@ -22,14 +22,17 @@ const nonprofits = (state = initialState, action) => {
     case GET_NONPROFITS_BY_NAME:
       return {
         ...state,
-        data: payload,
-        loading: false
+        data: payload
       }
     case GET_NONPROFITS_BY_EIN:
       return {
         ...state,
-        data: [...state.data, payload],
-        loading: false
+        data: [...state.data, payload]
+      }
+    case CLEAR_SEARCH:
+      return {
+        ...state,
+        data: []
       }
     case NONPROFIT_SAVED:
       return {
@@ -54,8 +57,7 @@ const nonprofits = (state = initialState, action) => {
     case SEARCH_ERROR:
       return {
         ...state,
-        error: payload,
-        loading: false
+        error: payload
       }
     default:
       return state;

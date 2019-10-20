@@ -1,12 +1,10 @@
 import React from 'react';
-import './Nav.css';
+import './Header.css';
 
-const Nav = () => {
-  return(
+const Nav = () => (
     <div className="nav">
       <span>FindIt</span> 
     </div>
-  )
-}
+);
 
-export default Nav
+export default Nav;

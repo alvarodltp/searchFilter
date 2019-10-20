@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './SearchResult.css';
+import './Suggestions.css';
 import { selectNonProfit, setAlert } from '../../actions/nonprofits';
 import { FaMapMarkerAlt, FaUniversity } from "react-icons/fa";
 
@@ -23,10 +23,14 @@ class SearchResult extends React.Component {
   }
 
   render(){
-    const { searchResults } = this.props;
+    const { suggestions } = this.props;
     return(
-      searchResults && searchResults.map((nonprofit, ein) => 
-      <div onClick={() => this.save(nonprofit)} key={ein} className='result-item'>
+      suggestions && suggestions.map((nonprofit, i) => 
+      <div 
+        onClick={() => this.save(nonprofit)} 
+        key={i} 
+        className='result-item'
+      >
         <h4><FaUniversity color="gray" />{' '}{nonprofit.name}</h4>
         <p><FaMapMarkerAlt color="white"/>{' '}{nonprofit.city}, {nonprofit.state}</p>
       </div> )
@@ -36,7 +40,7 @@ class SearchResult extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    searchResults: state.nonprofits.data,
+    suggestions: state.nonprofits.data,
     savedList: state.nonprofits.savedList
   }
 }

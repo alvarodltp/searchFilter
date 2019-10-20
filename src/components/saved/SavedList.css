@@ -6,7 +6,7 @@
   align-items: center;
   border-radius: 5px;
   overflow: auto;
-  background: #f0f0f0;
+  background: white;
 }
 
 .container-list {
@@ -16,13 +16,6 @@
   right: 0;
   bottom: 0;
 }
-
-.list-empty-message {
-  text-align: center;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%); 
-} 
 
 .alert-container {
   margin: 10px;

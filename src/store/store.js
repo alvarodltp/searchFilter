@@ -1,14 +1,13 @@
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from "redux-thunk";
 
 import nonprofits from "../reducers/nonprofits";
-import loading from "../reducers/loading";
 
 const initialState = {};
 
 const rootReducer = combineReducers({
-  nonprofits,
-  loading
+  nonprofits
 });
 
 const middleware = [thunkMiddleware];
@@ -16,9 +15,8 @@ const middleware = [thunkMiddleware];
 const store = createStore(
   rootReducer,
   initialState,
-  compose(applyMiddleware(...middleware))
+  composeWithDevTools(applyMiddleware(...middleware))
 );
 
-store.subscribe(() => console.log('store', store.getState()));
 
 export default store;

@@ -1,16 +1,18 @@
 import React from 'react';
 import './Search.css';
-import SearchResult from '../searchresult/SearchResult';
-import { Checkbox } from 'semantic-ui-react';
+import Suggestions from '../suggestions/Suggestions';
+import { Radio, Loader } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { getNonProfitByName, getNonProfitByEin } from '../../actions/nonprofits';
+import { isValid} from 'ein-validator';
 
 class Search extends React.Component {
   constructor(){
     super();
     this.state={
       inputType: 'text',
-      searchTerm: ''
+      searchTerm: '',
+      loading: false
     }
   }
 
@@ -18,52 +20,56 @@ class Search extends React.Component {
     this.setState({
       inputType: valueType,
       searchTerm: ''
-    });
+    })
   }
 
-  handleSearch = () => {
-    if(this.state.inputType === 'text'){
-      this.props.getNonProfitByName(this.state.searchTerm);
-    } else {
-      this.props.getNonProfitByEin(this.state.searchTerm);
+
+  handleSearch = (e) => {
+    const { inputType } = this.state;
+
+    this.setState({searchTerm: e.target.value});
+    if(inputType === 'text'){
+      this.props.getNonProfitByName(e.target.value);
+    } else if(inputType === 'number' && isValid(e.target.value)){
+      this.props.getNonProfitByEin(e.target.value);
     }
   }
 
   render(){
-    const { inputType } = this.state;
+    const { inputType, loading } = this.state;
     return(
-      <React.Fragment>
-        <div className="search-box">
-          <div className="checkbox-group">
-            <Checkbox 
-              onChange={(_, data) => this.handleCheckbox('text')} checked={inputType === 'text'}  
-              label='Search By Name'
-            />
-            <Checkbox 
-              onChange={(_, data) => this.handleCheckbox('number')} checked={inputType === 'number'} 
-              name="ein" 
-              label='Search By EIN'
-            />
-          </div>
-          <div className="search">
-            <input 
-              className="input" 
-              type={inputType} 
-              placeholder="Search Non-Profit..." 
-              onKeyUp={(e) => this.handleSearch(this.setState({searchTerm: e.target.value}))}
-            />
+      <div className="search-box">
+        <div className="checkbox-group">
+          <Radio 
+            onChange={(_, data) => this.handleCheckbox('text')} 
+            checked={inputType === 'text'}  
+            label='Search By Name'
+          />
+          <Radio 
+            onChange={(_, data) => this.handleCheckbox('number')} 
+            checked={inputType === 'number'} 
+            label='Search By EIN'
+          />
+        </div>
+        
+        <div className="search">
+          <input 
+            className="input" 
+            type={inputType} 
+            placeholder="Search Non-Profit..." 
+            onChange={(e) => this.handleSearch(e)}
+            value={this.state.searchTerm}
+          />
           <div className="results-container">
-            <SearchResult />
-          </div>
+            <Suggestions />
           </div>
         </div>
-      </React.Fragment>
+      </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  console.log(state.loading)
   return { loading: state.loading }
 };
 
