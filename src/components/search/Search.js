@@ -21,6 +21,7 @@ class Search extends React.Component {
             placeholder="Search Non-Profit By Name or EIN..." 
             onChange={(e) => this.handleOnChange(e)}
             value={search}
+            maxLength="200"
           />
           <Loader className="loader" active={loading} inline/>
         </div>
