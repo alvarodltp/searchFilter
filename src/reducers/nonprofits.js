@@ -1,16 +1,17 @@
 import { 
-  GET_NONPROFITS_BY_NAME, 
-  GET_NONPROFITS_BY_EIN, 
+  SET_SEARCH_RESULTS,
   SEARCH_ERROR, 
   NONPROFIT_SAVED,
   SET_ALERT,
   REMOVE_ALERT,
   NONPROFIT_REMOVED,
-  CLEAR_SEARCH
+  CLEAR_SEARCH,
+  SET_LOADING
 } from "../actions/types";
 
 const initialState = {
   data: [],
+  loading: false,
   savedList: [],
   alerts: [],
   error: {}
@@ -19,15 +20,10 @@ const initialState = {
 const nonprofits = (state = initialState, action) => {
   const { type, payload } = action;
   switch(type){
-    case GET_NONPROFITS_BY_NAME:
+    case SET_SEARCH_RESULTS:
       return {
         ...state,
         data: payload
-      }
-    case GET_NONPROFITS_BY_EIN:
-      return {
-        ...state,
-        data: [...state.data, payload]
       }
     case CLEAR_SEARCH:
       return {
@@ -58,6 +54,11 @@ const nonprofits = (state = initialState, action) => {
       return {
         ...state,
         error: payload
+      }
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: payload
       }
     default:
       return state;

@@ -1,53 +1,55 @@
 import axios from 'axios';
 import { 
-  GET_NONPROFITS_BY_NAME, 
-  GET_NONPROFITS_BY_EIN, 
+  SET_SEARCH_RESULTS, 
   NONPROFIT_SAVED, 
   SEARCH_ERROR,
   SET_ALERT,
   REMOVE_ALERT,
   NONPROFIT_REMOVED,
-  CLEAR_SEARCH
+  CLEAR_SEARCH,
+  SET_LOADING
 } from './types';
 import uuid from 'uuid';
+import { isValid } from 'ein-validator/dist/src';
 
 const url = "https://api.givebutter.dev/nonprofits/api/v2";
 
-export const getNonProfitByName = name => async dispatch => {
+export const setSearchResults = search => async dispatch => {
 
   try {
 
-    if(name && name.length > 1 && name.length % 2 === 0){
+    if(search.length === 0){
 
-      console.log(`${url}/search.json?q=${name}`);
-      const response = await axios.get(`${url}/search.json?q=${name}`);
-
-      dispatch({type: GET_NONPROFITS_BY_NAME, payload: response.data.organizations});
-    
-    } else {
       dispatch({type: CLEAR_SEARCH, payload: []});
+
+    } else if(isValid(search)){
+
+      dispatch({type: SET_LOADING, payload: true});
+
+      console.log(`https://api.givebutter.dev/nonprofits/api/v2/organizations/${search}.json`)
+
+      const response = await axios.get(`${url}/organizations/${search}.json`);
+    
+      dispatch({type: SET_SEARCH_RESULTS, payload: [response.data.organization]});
+
+      dispatch({type: SET_LOADING, payload: false});
+
+    } else {
+
+      dispatch({type: SET_LOADING, payload: true});
+      
+      console.log(`https://api.givebutter.dev/nonprofits/api/v2/search.json?q=${search}`);
+
+      const response = await axios.get(`${url}/search.json?q=${search}`);
+
+      dispatch({type: SET_SEARCH_RESULTS, payload: response.data.organizations});
+
+      dispatch({type: SET_LOADING, payload: false});
     }
 
   } catch (err) {
     dispatch({type: SEARCH_ERROR, payload: err})
-  };
-};
-
-// export const setSearchResults = search => async dispatch => {
-
-// };
-
-export const getNonProfitByEin = number => async dispatch => {
-  console.log(`${url}/organizations/${number}.json`);
-
-  try {
-    const response = await axios.get(`${url}/organizations/${number}.json`);
-    console.log(response)
-    dispatch({type: GET_NONPROFITS_BY_EIN, payload: response.data.organization});
-
-  } catch (err) {
-    dispatch({type: SEARCH_ERROR, payload: err})
-  };
+  }
 };
 
 export const selectNonProfit = nonprofit => dispatch => {
