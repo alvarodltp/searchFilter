@@ -23,7 +23,7 @@ class Search extends React.Component {
             onChange={(e) => this.handleOnChange(e)}
             value={search}
           />
-            <Loader className="loader" active={loading} inline/>
+          <Loader className="loader" active={loading} inline/>
         </div>
         <div className="results-container">
           <Suggestions />
@@ -34,6 +34,7 @@ class Search extends React.Component {
 }
 
 const mapStateToProps = state => {
+  console.log(state.nonprofits.loading)
   return { 
     loading: state.nonprofits.loading,
     search: state.nonprofits.search

@@ -38,12 +38,12 @@ export const setSearchResults = search => async (dispatch, getState) => {
   try {
     dispatch({type: SET_LOADING, payload: true});
 
-   if(search === searchState && isValid(searchState)){
+    if(searchState.length === 0){
+      dispatch({type: CLEAR_SEARCH, payload: []});
+    } else if(search === searchState && isValid(searchState)){
       searchByEIN(searchState)
     } else if(search === searchState) {
       searchByName(searchState)
-    } else {
-      dispatch({type: CLEAR_SEARCH, payload: []});
     }
 
     dispatch({type: SET_LOADING, payload: false});
@@ -68,8 +68,3 @@ export const setAlert = (message, type, timeout = 3000) => dispatch => {
 export const removeSavedNonProfit = ein => dispatch => {
   dispatch({ type: NONPROFIT_REMOVED, payload: ein});
 };
-
-
-// if(searchState.length === 0){
-//   dispatch({type: CLEAR_SEARCH, payload: []});
-// } else 
