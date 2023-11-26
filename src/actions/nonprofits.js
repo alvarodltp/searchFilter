@@ -13,7 +13,7 @@ import {
 import uuid from 'uuid';
 import { isValid } from 'ein-validator/dist/src';
 
-const url = "https://api.givebutter.dev/nonprofits/api/v2";
+const url = "https://projects.propublica.org/nonprofits/api/v2";
 
 export const handleSearch = search => dispatch => {
   dispatch({type: HANDLE_SEARCH, payload: search});
